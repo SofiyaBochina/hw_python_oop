@@ -1,0 +1,140 @@
+[33mcommit c67182248b4f7a551430c7141f866615dbf0c423[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m
+Author: Sofiya Bochina <drastnikova@gmail.com>
+Date:   Sat Oct 2 22:50:58 2021 +0300
+
+    First commit: one missing blank line added
+
+[1mdiff --git a/homework.py b/homework.py[m
+[1mindex 303bf7a..c58fdcf 100644[m
+[1m--- a/homework.py[m
+[1m+++ b/homework.py[m
+[36m@@ -1,9 +1,126 @@[m
+[32m+[m[32mfrom __future__ import annotations[m
+[32m+[m
+ import datetime as dt[m
+[32m+[m[32mfrom typing import List, Optional, Union[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass Record:[m
+[32m+[m[32m    """Класс записей."""[m
+[32m+[m
+[32m+[m[32m    def __init__(self, amount: int = 0, comment: str = "Неизвестно",[m
+[32m+[m[32m                 date: Optional[str] = None) -> None:[m
+[32m+[m[32m        """Конструктор класса Record, создаёт свойства для объекта[m
+[32m+[m[32m        и придаёт нужной формат дате записи,[m
+[32m+[m[32m        при необходимости записывая туда текущую дату.[m
+[32m+[m[32m        """[m
+[32m+[m
+[32m+[m[32m        self.amount = amount[m
+[32m+[m[32m        self.comment = comment[m
+[32m+[m[32m        if type(date) == str:[m
+[32m+[m[32m            record_date: dt.datetime = dt.datetime.strptime(date, '%d.%m.%Y')[m
+[32m+[m[32m            self.date = record_date.date()[m
+[32m+[m[32m        else:[m
+[32m+[m[32m            self.date = dt.date.today()[m
+ [m
+ [m
+ class Calculator:[m
+[31m-    pass[m
+[32m+[m[32m    """Родительский класс калькуляторов."""[m
+ [m
+[32m+[m[32m    def __init__(self, limit: float = 0) -> None:[m
+[32m+[m[32m        """Конструктор класса, создаёт свойство лимита для объекта[m
+[32m+[m[32m        и пустой список записей.[m
+[32m+[m[32m        """[m
+ [m
+[31m-class Record:[m
+[31m-    pass[m
+[32m+[m[32m        self.limit = limit[m
+[32m+[m[32m        self.records: List[Record] = [][m
+[32m+[m
+[32m+[m[32m    def add_record(self, record: Record) -> None:[m
+[32m+[m[32m        """Метод, добавляющий новый объект[m
+[32m+[m[32m        класса Record в список records.[m
+[32m+[m[32m        """[m
+[32m+[m
+[32m+[m[32m        self.records.append(record)[m
+[32m+[m
+[32m+[m[32m    def get_today_stats(self) -> int:[m
+[32m+[m[32m        """Метод, возвращающий количество[m
+[32m+[m[32m        потребленных калорий/денег за сегодня.[m
+[32m+[m[32m        """[m
+[32m+[m
+[32m+[m[32m        today_stats: int = 0[m
+[32m+[m[32m        for record in self.records:[m
+[32m+[m[32m            if record.date == dt.date.today():[m
+[32m+[m[32m                today_stats += record.amount[m
+[32m+[m[32m        return today_stats[m
+[32m+[m
+[32m+[m[32m    def get_week_stats(self) -> int:[m
+[32m+[m[32m        """Метод, возвращающий количество[m
+[32m+[m[32m        потребленных калорий/денег за последние 7 дней.[m
+[32m+[m[32m        """[m
+[32m+[m
+[32m+[m[32m        week_stats: int = 0[m
+[32m+[m[32m        for record in self.records:[m
+[32m+[m[32m            if (record.date > dt.date.today() - dt.timedelta(days=7)[m
+[32m+[m[32m                    and record.date <= dt.date.today()):[m
+[32m+[m[32m                week_stats += record.amount[m
+[32m+[m[32m        return week_stats[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass CaloriesCalculator(Calculator):[m
+[32m+[m[32m    """Класс-потомок класса Calculator,[m
+[32m+[m[32m    отвечающий за калькуляторы калорий.[m
+[32m+[m[32m    """[m
+[32m+[m
+[32m+[m[32m    def get_calories_remained(self) -> str:[m
+[32m+[m[32m        """Метод, возвращающий сообщение о текущем состоянии[m
+[32m+[m[32m        "баланса" калорий на сегодня.[m
+[32m+[m[32m        """[m
+[32m+[m
+[32m+[m[32m        if self.limit > self.get_today_stats():[m
+[32m+[m[32m            calories_remained: Union[int, float] = (self.limit[m
+[32m+[m[32m                                                    - self.get_today_stats())[m
+[32m+[m[32m            return('Сегодня можно съесть что-нибудь ещё, '[m
+[32m+[m[32m                   'но с общей калорийностью не более '[m
+[32m+[m[32m                   f'{calories_remained} кКал')[m
+[32m+[m[32m        return 'Хватит есть!'[m
+[32m+[m
+[32m+[m
+[32m+[m[32mclass CashCalculator(Calculator):[m
+[32m+[m[32m    """Класс-потомок класса Calculator,[m
+[32m+[m[32m    отвечающий за калькуляторы денег. В теле содержатся[m
+[32m+[m[32m    константы курсов валют.[m
+[32m+[m[32m    """[m
+[32m+[m
+[32m+[m[32m    USD_RATE: float = 72.74[m
+[32m+[m[32m    EURO_RATE: float = 84.32[m
+[32m+[m
+[32m+[m[32m    def get_today_cash_remained(self, currency: str) -> str:[m
+[32m+[m[32m        """Метод, возвращающий сообщение о текущем состоянии[m
+[32m+[m[32m        баланса денег в требуемой валюте на сегодня.[m
+[32m+[m[32m        """[m
+[32m+[m
+[32m+[m[32m        cash_remain: float[m
+[32m+[m[32m        cash_duty: float[m
+[32m+[m[32m        if self.limit == self.get_today_stats():[m
+[32m+[m[32m            return 'Денег нет, держись'[m
+[32m+[m[32m        elif self.limit > self.get_today_stats():[m
+[32m+[m[32m            if currency == 'usd':[m
+[32m+[m[32m                cash_remain = (self.limit[m
+[32m+[m[32m                               - self.get_today_stats()) / self.USD_RATE[m
+[32m+[m[32m                return f'На сегодня осталось {cash_remain:.2f} USD'[m
+[32m+[m[32m            elif currency == 'eur':[m
+[32m+[m[32m                cash_remain = ((self.limit - self.get_today_stats())[m
+[32m+[m[32m                               / self.EURO_RATE)[m
+[32m+[m[32m                return f'На сегодня осталось {cash_remain:.2f} Euro'[m
+[32m+[m[32m            cash_remain = self.limit - self.get_today_stats()[m
+[32m+[m[32m            return f'На сегодня осталось {cash_remain} руб'[m
+[32m+[m
+[32m+[m[32m        if currency == 'usd':[m
+[32m+[m[32m            cash_duty = (self.get_today_stats()[m
+[32m+[m[32m                         - self.limit) / self.USD_RATE[m
+[32m+[m[32m            return f'Денег нет, держись: твой долг - {cash_duty:.2f} USD'[m
+[32m+[m[32m        elif currency == 'eur':[m
+[32m+[m[32m            cash_duty = (self.get_today_stats()[m
+[32m+[m[32m                         - self.limit) / self.EURO_RATE[m
+[32m+[m[32m            return f'Денег нет, держись: твой долг - {cash_duty:.2f} Euro'[m
+[32m+[m[32m        cash_duty = self.get_today_stats() - self.limit[m
+[32m+[m[32m        return f'Денег нет, держись: твой долг - {cash_duty} руб'[m
