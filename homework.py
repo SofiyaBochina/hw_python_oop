@@ -1,14 +1,14 @@
 from __future__ import annotations
 
 import datetime as dt
-from typing import List, Dict, Optional, Union
+from typing import List, Dict, Tuple, Optional, Union
 
 
 FORMAT: str = '%d.%m.%Y'
 CURRENCIES: (Dict[str,
-             Dict[str, Union[float, str]]]) = {'usd': (60, 'USD'),
-                                               'eur': (70, 'Euro'),
-                                               'rub': (1, 'руб')}
+             Tuple[Union[float, str]]]) = {'usd': (60, 'USD'),
+                                           'eur': (70, 'Euro'),
+                                           'rub': (1, 'руб')}
 CAL_BALANCE: str = ('Сегодня можно съесть что-нибудь ещё, '
                     'но с общей калорийностью не более '
                     '{balance} кКал')
